@@ -1,35 +1,55 @@
 export class Component {
-    constructor(type, attrs, ...childs) {
-        this.node = new type(attrs);
-        this.props = attrs;
-        this.children = childs
-        this.childrenNode = this.render()
+    constructor(attrs, ...childs) {
+        this.node = document.createDocumentFragment();
+        this.childs = this.render()
+        this.props = {
+            attrs,
+            children: childs
+        };
+    }
+
+    mountTo(parent) {
+        return parent.appendChild(this.node)
+    }
+
+    appendChild() {
+        return this.node.appendChild(this.childs)
     }
 }
 
 class ElementWrapper {
     constructor(type, attrs, ...childs) {
         this.node = document.createElement(type);
-        this.props = attrs;
-        this.children = childs
+        this.childs = childs;
+        this.props = {
+            attrs,
+            children: childs
+        };
+    }
+
+    mountTo(parent) {
+        return parent.appendChild(this.node)
+    }
+
+    appendChild() {
+        return this.node.appendChild(this.childs)
     }
 }
 
 function createElement(type, attrs, ...childs) {
-    console.log(typeof type)
     if(typeof type === 'string')
         return new ElementWrapper(type, attrs, ...childs)
     else
-        return new type(type, attrs, ...childs)
+        return new type(attrs, ...childs)
 }
 
-function reactDomTransform(node) {
-
+let result = document.createDocumentFragment();
+function renderReactDom(root) {
+    if(root.node.childs)
 }
 
 function render(root, dom) {
-    console.log(root)
-    dom.appendChild(reactDomTransform(root.node))
+    dom.appendChild(renderReactDom(root))
 }
 
 export default {
